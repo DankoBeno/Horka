@@ -1,17 +1,122 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
-int main()
-{
-    int a, b, c;
+vector<string> words = { "apple", "banana", "cherry", "orange", "grape", "pineapple", "strawberry", "blueberry" };
 
-    cin >> a;
-    cin >> b;
-    cin >> c;
-    int v = a * b * c;
-    int s = 2 * (a * b + b * c + c * a);
+string getRandomWord() {
+    srand(time(0));
+    int index = rand() % words.size();
+    return words[index];
+}
 
-    cout << "V" << v << " " << "S" << s << "\n";
+bool containsChar(string word, char guess) {
+    return word.find(guess) != string::npos;
+}
+
+string drawHangman(int incorrectGuesses) {
+    string hangman;
+
+    switch (incorrectGuesses) {
+    case 1:
+        hangman = "  ____\n |    |\n |\n |\n |\n_|_\n";
+        break;
+    case 2:
+        hangman = "  ____\n |    |\n |    O\n |\n |\n_|_\n";
+        break;
+    case 3:
+        hangman = "  ____\n |    |\n |    O\n |    |\n |\n_|_\n";
+        break;
+    case 4:
+        hangman = "  ____\n |    |\n |    O\n |   /|\n |\n_|_\n";
+        break;
+    case 5:
+        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |\n_|_\n";
+        break;
+    case 6:
+        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   /\n_|_\n";
+        break;
+    case 7:
+        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   / \\\n_|_\n";
+        break;
+    default:
+        hangman = "";
+        break;
+    }
+
+    return hangman;
+}
+
+void displayWord(string word, vector<char> guessedChars) {
+    for (char letter : word) {
+        if (find(guessedChars.begin(), guessedChars.end(), letter) != guessedChars.end()) {
+            cout << letter << " ";
+        }
+        else {
+            cout << "_ ";
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    const int maxAttempts = 7;
+    int incorrectGuesses = 0;
+    vector<char> guessedChars;
+    string word = getRandomWord();
+
+    cout << "Welcome to Hangman!" << endl;
+    cout << "Try to guess the word." << endl;
+
+    while (incorrectGuesses < maxAttempts) {
+        cout << drawHangman(incorrectGuesses) << endl;
+        displayWord(word, guessedChars);
+
+        if (guessedChars.size() > 0) {
+            cout << "Guessed letters: ";
+            for (char letter : guessedChars) {
+                cout << letter << " ";
+            }
+            cout << endl;
+        }
+
+        cout << "Enter a letter: ";
+        char guess;
+        cin >> guess;
+
+        if (containsChar(word, guess)) {
+            cout << "Correct guess!" << endl;
+        }
+        else {
+            cout << "Incorrect guess!" << endl;
+            incorrectGuesses++;
+        }
+
+        guessedChars.push_back(guess);
+
+        bool foundAllLetters = true;
+        for (char letter : word) {
+            if (find(guessedChars.begin(), guessedChars.end(), letter) == guessedChars.end()) {
+                foundAllLetters = false;
+                break;
+            }
+        }
+
+        if (foundAllLetters) {
+            cout << "Congratulations! You guessed the word: " << word << endl;
+            break;
+        }
+    }
+
+    if (incorrectGuesses >= maxAttempts) {
+        cout << drawHangman(incorrectGuesses) << endl;
+        cout << "You lose! The word was: " << word << endl;
+    }
+
     return 0;
 }
