@@ -8,12 +8,26 @@
 
 using namespace std;
 
-vector<string> words = { "apple", "banana", "cherry", "orange", "grape", "pineapple", "strawberry", "blueberry" };
+vector<string> slova;
+
+// Funkcia načíta slová zo súboru a vráti ich ako vektor
+void nacitajSlova() {
+    ifstream subor("slova.txt");
+    if (!subor.is_open()) {
+        cout << "Chyba pri otvarani suboru so slovami." << endl;
+        exit(1);
+    }
+    string slovo;
+    while (subor >> slovo) {
+        slova.push_back(slovo);
+    }
+    subor.close();
+}
 
 string getRandomWord() {
     srand(time(0));
-    int index = rand() % words.size();
-    return words[index];
+    int index = rand() % slova.size();
+    return slova[index];
 }
 
 bool containsChar(string word, char guess) {
@@ -62,6 +76,8 @@ int main() {
     const int maxAttempts = 7;
     int incorrectGuesses = 0;
     vector<char> guessedChars;
+    nacitajSlova(); // Načítanie slov zo súboru
+
     string word = getRandomWord();
 
     cout << "Welcome to Hangman!" << endl;
@@ -82,7 +98,6 @@ int main() {
         cout << "Enter a letter: ";
         char guess;
         cin >> guess;
-        cin.ignore(); // Ignore newline character
 
         if (containsChar(word, guess)) {
             cout << "Correct guess!" << endl;
