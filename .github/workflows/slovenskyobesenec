@@ -1,0 +1,122 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+vector<string> words = { "apple", "banana", "cherry", "orange", "grape", "pineapple", "strawberry", "blueberry" };
+
+string getRandomWord() {
+    srand(time(0));
+    int index = rand() % words.size();
+    return words[index];
+}
+
+bool containsChar(string word, char guess) {
+    return word.find(guess) != string::npos;
+}
+
+string drawHangman(int zle) {
+    string hangman;
+
+    switch (zle) {
+    case 1:
+        hangman = "  ____\n |    |\n |\n |\n |\n_|_\n";
+        break;
+    case 2:
+        hangman = "  ____\n |    |\n |    O\n |\n |\n_|_\n";
+        break;
+    case 3:
+        hangman = "  ____\n |    |\n |    O\n |    |\n |\n_|_\n";
+        break;
+    case 4:
+        hangman = "  ____\n |    |\n |    O\n |   /|\n |\n_|_\n";
+        break;
+    case 5:
+        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |\n_|_\n";
+        break;
+    case 6:
+        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   /\n_|_\n";
+        break;
+    case 7:
+        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   / \\\n_|_\n";
+        break;
+    default:
+        hangman = "";
+        break;
+    }
+
+    return hangman;
+}
+
+void displayWord(string word, vector<char> guessedChars) {
+    for (char letter : word) {
+        if (find(guessedChars.begin(), guessedChars.end(), letter) != guessedChars.end()) {
+            cout << letter << " ";
+        }
+        else {
+            cout << "_ ";
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    const int maxAttempts = 7;
+    int zle = 0;
+    vector<char> guessedChars;
+    string word = getRandomWord();
+
+    cout << "Vitaj v hre obesenec!" << endl;
+    cout << "Skus uhadnut skryte slovo." << endl;
+
+    while (zle < maxAttempts) {
+        cout << drawHangman(zle) << endl;
+        displayWord(word, guessedChars);
+
+        if (guessedChars.size() > 0) {
+            cout << "Hadane pismena: ";
+            for (char letter : guessedChars) {
+                cout << letter << " ";
+            }
+            cout << endl;
+        }
+
+        cout << "Zadaj pismeno: ";
+        char guess;
+        cin >> guess;
+
+        if (containsChar(word, guess)) {
+            cout << "Uhadol si spravne" << endl;
+        }
+        else {
+            cout << "Neuhadol si" << endl;
+            zle++;
+        }
+
+        guessedChars.push_back(guess);
+
+        bool foundAllLetters = true;
+        for (char letter : word) {
+            if (find(guessedChars.begin(), guessedChars.end(), letter) == guessedChars.end()) {
+                foundAllLetters = false;
+                break;
+            }
+        }
+
+        if (foundAllLetters) {
+            cout << "Gratulujeme, uhadol si skryte slovo:: " << word << endl;
+            break;
+        }
+    }
+
+    if (zle >= maxAttempts) {
+        cout << drawHangman(zle) << endl;
+        cout << "Neuhádol si, skryte slovo bolo: " << word << endl;
+    }
+
+    return 0;
+}
