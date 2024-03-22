@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -21,34 +22,27 @@ bool containsChar(string word, char guess) {
 
 string drawHangman(int incorrectGuesses) {
     string hangman;
-
-    switch (incorrectGuesses) {
-    case 1:
+    if (incorrectGuesses == 1) {
         hangman = "  ____\n |    |\n |\n |\n |\n_|_\n";
-        break;
-    case 2:
-        hangman = "  ____\n |    |\n |    O\n |\n |\n_|_\n";
-        break;
-    case 3:
-        hangman = "  ____\n |    |\n |    O\n |    |\n |\n_|_\n";
-        break;
-    case 4:
-        hangman = "  ____\n |    |\n |    O\n |   /|\n |\n_|_\n";
-        break;
-    case 5:
-        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |\n_|_\n";
-        break;
-    case 6:
-        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   /\n_|_\n";
-        break;
-    case 7:
-        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   / \\\n_|_\n";
-        break;
-    default:
-        hangman = "";
-        break;
     }
-
+    else if (incorrectGuesses == 2) {
+        hangman = "  ____\n |    |\n |    O\n |\n |\n_|_\n";
+    }
+    else if (incorrectGuesses == 3) {
+        hangman = "  ____\n |    |\n |    O\n |    |\n |\n_|_\n";
+    }
+    else if (incorrectGuesses == 4) {
+        hangman = "  ____\n |    |\n |    O\n |   /|\n |\n_|_\n";
+    }
+    else if (incorrectGuesses == 5) {
+        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |\n_|_\n";
+    }
+    else if (incorrectGuesses == 6) {
+        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   /\n_|_\n";
+    }
+    else if (incorrectGuesses == 7) {
+        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   / \\\n_|_\n";
+    }
     return hangman;
 }
 
@@ -88,6 +82,7 @@ int main() {
         cout << "Enter a letter: ";
         char guess;
         cin >> guess;
+        cin.ignore(); // Ignore newline character
 
         if (containsChar(word, guess)) {
             cout << "Correct guess!" << endl;
