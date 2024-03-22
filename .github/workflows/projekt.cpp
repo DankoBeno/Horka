@@ -18,27 +18,27 @@ bool containsChar(const string& word, char guess) {
     return word.find(guess) != string::npos;
 }
 
-string drawHangman(int incorrectGuesses) {
+string drawHangman(int neuhadol) {
     string hangman;
-    if (incorrectGuesses == 1) {
+    if (neuhadol == 1) {
         hangman = "  ____\n |    |\n |\n |\n |\n_|_\n";
     }
-    else if (incorrectGuesses == 2) {
+    else if (neuhadol == 2) {
         hangman = "  ____\n |    |\n |    O\n |\n |\n_|_\n";
     }
-    else if (incorrectGuesses == 3) {
+    else if (neuhadol == 3) {
         hangman = "  ____\n |    |\n |    O\n |    |\n |\n_|_\n";
     }
-    else if (incorrectGuesses == 4) {
+    else if (neuhadol == 4) {
         hangman = "  ____\n |    |\n |    O\n |   /|\n |\n_|_\n";
     }
-    else if (incorrectGuesses == 5) {
+    else if (neuhadol == 5) {
         hangman = "  ____\n |    |\n |    O\n |   /|\\\n |\n_|_\n";
     }
-    else if (incorrectGuesses == 6) {
+    else if (neuhadol == 6) {
         hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   /\n_|_\n";
     }
-    else if (incorrectGuesses == 7) {
+    else if (neuhadol == 7) {
         hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   / \\\n_|_\n";
     }
     return hangman;
@@ -80,34 +80,34 @@ int main() {
     string wordToGuess = getRandomWord(words);
 
     const int maxAttempts = 7;
-    int incorrectGuesses = 0;
+    int neuhadol = 0;
     vector<char> guessedChars;
 
-    cout << "Welcome to Hangman!" << endl;
-    cout << "Try to guess the word." << endl;
+    cout << "Vitej v hre Obesenec!" << endl;
+    cout << "Skus uhadnut skryte slovo." << endl;
 
-    while (incorrectGuesses < maxAttempts) {
-        cout << drawHangman(incorrectGuesses) << endl;
+    while (neuhadol < maxAttempts) {
+        cout << drawHangman(neuhadol) << endl;
         displayWord(wordToGuess, guessedChars);
 
         if (!guessedChars.empty()) {
-            cout << "Guessed letters: ";
+            cout << "Hadane pismena: ";
             for (char letter : guessedChars) {
                 cout << letter << " ";
             }
             cout << endl;
         }
 
-        cout << "Enter a letter: ";
+        cout << "Hadaj pismeno: ";
         char guess;
         cin >> guess;
         cin.ignore(); // Ignorujeme nový riadok
 
         if (containsChar(wordToGuess, guess)) {
-            cout << "Correct guess!" << endl;
+            cout << "Spravne uhadnute!" << endl;
         }
         else {
-            cout << "Incorrect guess!" << endl;
+            cout << "Neuhadol si!" << endl;
             incorrectGuesses++;
         }
 
@@ -122,14 +122,14 @@ int main() {
         }
 
         if (foundAllLetters) {
-            cout << "Congratulations! You guessed the word: " << wordToGuess << endl;
+            cout << "Gratulujem! Uhadol si skryte slovo: " << wordToGuess << endl;
             break;
         }
     }
 
     if (incorrectGuesses >= maxAttempts) {
-        cout << drawHangman(incorrectGuesses) << endl;
-        cout << "You lose! The word was: " << wordToGuess << endl;
+        cout << drawHangman(neuhadol) << endl;
+        cout << "Neuhadol si! Skryte slovo bolo: " << wordToGuess << endl;
     }
 
     return 0;
