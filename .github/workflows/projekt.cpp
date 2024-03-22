@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -21,7 +22,7 @@ bool containsChar(const string& word, char guess) {
 string drawHangman(int neuhadol) {
     string hangman;
     if (neuhadol == 1) {
-        hangman = "  ____\n |    |\n |\n |\n |\n_|_\n";
+        hangman = "  ____\n ║    ║\n ║\n ║\n ║\n_║_\n";
     }
     else if (neuhadol == 2) {
         hangman = "  ____\n |    |\n |    O\n |\n |\n_|_\n";
@@ -65,7 +66,7 @@ int main() {
 
     // Skontrolujeme, či sa súbor otvoril úspešne
     if (!file.is_open()) {
-        cout << "Nepodarilo sa otvoriť súbor!" << endl;
+        cout << "Nepodarilo sa otvorit subor!" << endl;
         return 1;
     }
 
@@ -108,7 +109,7 @@ int main() {
         }
         else {
             cout << "Neuhadol si!" << endl;
-            incorrectGuesses++;
+            neuhadol++;
         }
 
         guessedChars.push_back(guess);
@@ -127,7 +128,7 @@ int main() {
         }
     }
 
-    if (incorrectGuesses >= maxAttempts) {
+    if (neuhadol >= maxAttempts) {
         cout << drawHangman(neuhadol) << endl;
         cout << "Neuhadol si! Skryte slovo bolo: " << wordToGuess << endl;
     }
