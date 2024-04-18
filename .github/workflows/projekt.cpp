@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -9,10 +8,18 @@
 
 using namespace std;
 
-string getRandomWord(const vector<string>& words) {
+vector<char> usedLetters; // Zoznam už hádaných písmen
+
+string getRandomWord(const vector<string>& words, int minLength, int maxLength) {
+    vector<string> filteredWords;
+    for (const string& word : words) {
+        if (word.length() >= minLength && word.length() <= maxLength) {
+            filteredWords.push_back(word);
+        }
+    }
     srand(time(0));
-    int index = rand() % words.size();
-    return words[index];
+    int index = rand() % filteredWords.size();
+    return filteredWords[index];
 }
 
 bool containsChar(const string& word, char guess) {
@@ -57,6 +64,19 @@ void displayWord(const string& word, const vector<char>& guessedChars) {
     cout << endl;
 }
 
+bool alreadyGuessed(char guess) {
+    for (char letter : usedLetters) {
+        if (letter == guess) {
+            return true; // Písmeno už bolo hádané
+        }
+    }
+    return false; // Písmeno ešte nebolo hádané
+}
+
+void addToUsedLetters(char guess) {
+    usedLetters.push_back(guess); // Pridáme písmeno do zoznamu už hádaných
+}
+
 int main() {
     vector<string> words;
     string word;
@@ -78,13 +98,43 @@ int main() {
     // Zatvoríme súbor
     file.close();
 
-    string wordToGuess = getRandomWord(words);
+    int minLength, maxLength;
+    char levelChoice;
+
+    // Výber obtiažnosti na začiatku programu
+    cout << "Vitej v hre Obesenec!" << endl;
+    cout << "Vyber obtiaznost:" << endl;
+    cout << "1 - Lahka uroven (4 pismena)" << endl;
+    cout << "2 - Stredna uroven (5-6 pismen)" << endl;
+    cout << "3 - Tazka uroven (7-10 pismen)" << endl;
+
+    cin >> levelChoice;
+
+    switch (levelChoice) {
+    case '1':
+        minLength = maxLength = 4;
+        break;
+    case '2':
+        minLength = 5;
+        maxLength = 6;
+        break;
+    case '3':
+        minLength = 7;
+        maxLength = 10;
+        break;
+    default:
+        cout << "Nespravny vyber obtiaznosti. Ukoncujem program." << endl;
+        return 1;
+    }
+    system("cls");
+
+    string wordToGuess = getRandomWord(words, minLength, maxLength);
 
     const int maxAttempts = 7;
     int neuhadol = 0;
     vector<char> guessedChars;
+    usedLetters.clear(); // Vyprázdnenie zoznamu už hádaných písmen
 
-    cout << "Vitej v hre Obesenec!" << endl;
     cout << "Skus uhadnut skryte slovo." << endl;
 
     while (neuhadol < maxAttempts) {
@@ -98,7 +148,6 @@ int main() {
             }
             cout << endl;
         }
-
         cout << "Hadaj pismeno: ";
         char guess;
         cin >> guess;
@@ -107,8 +156,12 @@ int main() {
         if (containsChar(wordToGuess, guess)) {
             cout << "Spravne uhadnute!" << endl;
         }
+        else if (alreadyGuessed(guess)) {
+            cout << "Toto pismeno si uz mal!" << endl;
+        }
         else {
             cout << "Neuhadol si!" << endl;
+            addToUsedLetters(guess); // Pridáme písmeno do zoznamu už hádaných
             neuhadol++;
         }
 
