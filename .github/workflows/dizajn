@@ -62,13 +62,13 @@ string drawHangman(int neuhadol) {
     string hangman;
     if (neuhadol == 1) {
         hangman = "  ____\n |    |\n |\n |\n |\n_|_\n";
-        hangman = "  ____\n |    |\n ║\n ║\n ║\n_║_\n";
+        hangman = "  ____\n |    |\n |\n |\n |\n_|_\n";
     }
     else if (neuhadol == 2) {
-        hangman = "  ____\n |    |\n ║    O\n ║\n ║\n_║_\n";
+        hangman = "  ____\n |    |\n |    O\n |\n |\n_|_\n";
     }
     else if (neuhadol == 3) {
-        hangman = "  ____\n ║    |\n ║    O\n ║\n ║\n_║_\n";
+        hangman = "  ____\n |    |\n |    O\n |\n |\n_|_\n";
     }
     else if (neuhadol == 4) {
         hangman = "  ____\n |    |\n |    O\n |   /|\n |\n_|_\n";
@@ -102,7 +102,24 @@ bool alreadyGuessed(char guess, const vector<char>& usedLetters) {
 }
 
 int main() {
-    vector<string> words = { "pes", "macka", "auto", "interpunkcia", "hrnec", "kvety", "strom" };
+    vector<string> words;
+    string word;
+
+
+    ifstream file("slova.txt");
+
+
+    if (!file.is_open()) {
+        cout << "Nepodarilo sa otvorit subor!" << endl;
+        return 1;
+    }
+
+
+    while (file >> word) {
+        words.push_back(word);
+    }
+
+    file.close();
 
     while (true) {
         clearConsole(); // Clear the console screen
@@ -199,6 +216,7 @@ int main() {
                 for (char letter : wordToGuess) {
                     if (find(guessedChars.begin(), guessedChars.end(), letter) == guessedChars.end()) {
                         foundAllLetters = false;
+                        break;
                     }
                 }
                 if (foundAllLetters) {
@@ -214,23 +232,23 @@ int main() {
         }
         case '2':
             clearConsole(); // Clear the console screen
-            cout << "Welcome to Hangman!" << endl;
-            cout << "1. You have to guess the hidden word by making 7 incorrect guesses." << endl;
-            cout << "2. The hidden word will be displayed with blanks for each letter." << endl;
-            cout << "3. Guess one letter at a time." << endl;
-            cout << "4. If your guessed letter is in the hidden word, it will be revealed." << endl;
-            cout << "5. If your guessed letter is not in the hidden word, your incorrect guesses will be counted." << endl;
-            cout << "6. You win the game if you guess all the letters in the hidden word before making 7 incorrect guesses." << endl;
-            cout << "7. You lose the game if you make 7 incorrect guesses before guessing all the letters in the hidden word." << endl;
+            cout << "Vitajte v Obesencovi!" << endl;
+            cout << "1. Musite uhadnut skryte slovo." << endl;
+            cout << "2. Skryte slovo sa zobrazi ale bude zamaskovane." << endl;
+            cout << "3. Hadajte po jednom pismene." << endl;
+            cout << "4. Ak uhadnete pismeno v skrytom slove, bude odhalene." << endl;
+            cout << "5. Ak sa vase uhadnute pismeno nenachadza v skrytom slove, zapocita sa do nespravneho tipu." << endl;
+            cout << "6. Hru vyhrate, ak uhadnete vsetky pismena v skrytom slove skor, ako urobite 7 nespravnych tipov." << endl;
+            cout << "7. Hru prehrate, ak urobite 7 nespravnych tipov predtym, ako slovo." << endl;
             break;
         case '3':
-            cout << "Exiting the game. Goodbye!" << endl;
+            cout << "Vypninam hru. Dovidenia!" << endl;
             exit(0);
         default:
-            cout << "Invalid choice. Please select again." << endl;
+            cout << "Neplatna volba. Vyberte znova." << endl;
         }
 
-        cout << "\n\nPress Enter to continue...";
+        cout << "\n\nStlac ENTER pre pokracovanie...";
         cin.ignore();
         cin.get();
     }
