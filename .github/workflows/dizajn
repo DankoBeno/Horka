@@ -1,4 +1,3 @@
-#define WIN32_LEAN_AND_MEAN
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -105,15 +104,12 @@ int main() {
     vector<string> words;
     string word;
 
-
     ifstream file("slova.txt");
-
 
     if (!file.is_open()) {
         cout << "Nepodarilo sa otvorit subor!" << endl;
         return 1;
     }
-
 
     while (file >> word) {
         words.push_back(word);
@@ -137,11 +133,11 @@ int main() {
             "\t\t |              3.  Odist              | \n"
             "\t\t |_____________________________________| \n\n\n";
 
-        char choice;
+        char choice[10];
         cout << "Vyber moznost: ";
         cin >> choice;
-        switch (choice) {
-        case '1': {
+        switch (atoi(choice)) {
+        case 1: {
             int minLength, maxLength;
             char levelChoice;
 
@@ -230,7 +226,7 @@ int main() {
             }
             break;
         }
-        case '2':
+        case 2:
             clearConsole(); // Clear the console screen
             cout << "Vitajte v Obesencovi!" << endl;
             cout << "1. Musite uhadnut skryte slovo." << endl;
@@ -241,9 +237,16 @@ int main() {
             cout << "6. Hru vyhrate, ak uhadnete vsetky pismena v skrytom slove skor, ako urobite 7 nespravnych tipov." << endl;
             cout << "7. Hru prehrate, ak urobite 7 nespravnych tipov predtym, ako slovo." << endl;
             break;
-        case '3':
+        case 3:
             cout << "Vypninam hru. Dovidenia!" << endl;
             exit(0);
+        case 420:
+            clearConsole();
+            cout << "Tvorcovia:" << endl;
+            cout << " Robik28 " << endl;
+            cout << " DadkoSVK" << endl;
+            cout << " Lukyys" << endl;
+            break;
         default:
             cout << "Neplatna volba. Vyberte znova." << endl;
         }
