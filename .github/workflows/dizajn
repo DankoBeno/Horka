@@ -62,10 +62,10 @@ string drawHangman(int neuhadol) {
     string hangman;
     if (neuhadol == 1) {
         hangman = "  ____\n |    |\n |\n |\n |\n_|_\n";
-        hangman = "  ____\n ║    |\n ║\n ║\n ║\n_║_\n";
+        hangman = "  ____\n |    |\n ║\n ║\n ║\n_║_\n";
     }
     else if (neuhadol == 2) {
-        hangman = "  ____\n ║    |\n ║    O\n ║\n ║\n_║_\n";
+        hangman = "  ____\n |    |\n ║    O\n ║\n ║\n_║_\n";
     }
     else if (neuhadol == 3) {
         hangman = "  ____\n ║    |\n ║    O\n ║\n ║\n_║_\n";
@@ -185,7 +185,8 @@ int main() {
                     cout << "Pismeno v slove je :)" << endl;
                 }
                 else if (alreadyGuessed(guess, usedLetters)) {
-                    cout << "Toto pismeno si uz mal!" << endl;
+                    usedLetters.push_back(guess);
+                    neuhadol++;
                 }
                 else {
                     cout << "Pismeno v slove nie je :(" << endl;
@@ -198,7 +199,6 @@ int main() {
                 for (char letter : wordToGuess) {
                     if (find(guessedChars.begin(), guessedChars.end(), letter) == guessedChars.end()) {
                         foundAllLetters = false;
-                        break;
                     }
                 }
                 if (foundAllLetters) {
