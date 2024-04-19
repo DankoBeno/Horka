@@ -242,6 +242,7 @@ int main() {
             exit(0);
         case 420:
             clearConsole();
+            cout << "Nasiel si Easteregg! Gratulujem." << endl;
             cout << "Tvorcovia:" << endl;
             cout << " Robik28 " << endl;
             cout << " DadkoSVK" << endl;
