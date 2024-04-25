@@ -225,16 +225,16 @@ bool alreadyGuessed(char guess, const vector<char>& usedLetters) {
 }
 
 void handleConsoleInput() {
-    char choice[10];
+    int choice; // Change to integer for input type
     while (true) {
         system("cls"); // Clear the console screen
 
         drawMenu();
 
         cout << "Vyber moznost: ";
-        cin >> choice;
-        switch (atoi(choice)) {
-        case '1': {
+        cin >> choice; // Read input as integer
+        switch (choice) { // Use integer for comparison
+        case 1: {
             int minLength, maxLength;
             char levelChoice;
 
@@ -342,7 +342,7 @@ void handleConsoleInput() {
             }
             break;
         }
-        case '2':
+        case 2:
             cout << "Vitajte v Obesencovi!" << endl;
             cout << "1. Musite uhadnut skryte slovo." << endl;
             cout << "2. Skryte slovo sa zobrazi ale bude zamaskovane." << endl;
