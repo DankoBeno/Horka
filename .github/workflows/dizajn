@@ -1,3 +1,4 @@
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -6,40 +7,10 @@
 #include <ctime>
 #include <algorithm>
 #include <windows.h>
+#include <thread>
 
 using namespace std;
 
-void clearConsole() {
-    HANDLE hStdOut;
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    DWORD count;
-    DWORD cellCount;
-    COORD homeCoords = { 0, 0 };
-
-    hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (hStdOut == INVALID_HANDLE_VALUE) return;
-
-    if (!GetConsoleScreenBufferInfo(hStdOut, &csbi)) return;
-    cellCount = csbi.dwSize.X * csbi.dwSize.Y;
-
-    if (!FillConsoleOutputCharacter(
-        hStdOut,
-        (TCHAR)' ',
-        cellCount,
-        homeCoords,
-        &count
-    )) return;
-
-    if (!FillConsoleOutputAttribute(
-        hStdOut,
-        csbi.wAttributes,
-        cellCount,
-        homeCoords,
-        &count
-    )) return;
-
-    SetConsoleCursorPosition(hStdOut, homeCoords);
-}
 
 string getRandomWord(const vector<string>& words, int minLength, int maxLength) {
     vector<string> filteredWords;
@@ -57,31 +28,184 @@ bool containsChar(const string& word, char guess) {
     return word.find(guess) != string::npos;
 }
 
-string drawHangman(int neuhadol) {
-    string hangman;
-    if (neuhadol == 1) {
-        hangman = "  ____\n |    |\n |\n |\n |\n_|_\n";
-        hangman = "  ____\n |    |\n |\n |\n |\n_|_\n";
+void drawStickman(sf::RenderWindow& window, int neuhadol) {
+    sf::RectangleShape snurka(sf::Vector2f(70, 5));
+    snurka.setFillColor(sf::Color::White);
+    snurka.setPosition(403, 60);
+    snurka.setRotation(90);
+
+    sf::RectangleShape stojanTyc(sf::Vector2f(325, 20));
+    stojanTyc.setFillColor(sf::Color::White);
+    stojanTyc.setPosition(165, 65);
+    stojanTyc.setRotation(90);
+
+    sf::RectangleShape stojanTycR(sf::Vector2f(270, 20));
+    stojanTycR.setFillColor(sf::Color::White);
+    stojanTycR.setPosition(145, 45);
+
+    sf::RectangleShape stojanLava(sf::Vector2f(140, 20));
+    stojanLava.setFillColor(sf::Color::White);
+    stojanLava.setPosition(170, 370);
+    stojanLava.setRotation(135);
+
+    sf::RectangleShape stojanPrava(sf::Vector2f(120, 20));
+    stojanPrava.setFillColor(sf::Color::White);
+    stojanPrava.setPosition(170, 370);
+    stojanPrava.setRotation(45);
+
+    sf::RectangleShape xOneR(sf::Vector2f(14, 2));
+    xOneR.setFillColor(sf::Color::Black);
+    xOneR.setPosition(385, 135);
+    xOneR.setRotation(45);
+
+    sf::RectangleShape xOneL(sf::Vector2f(14, 2));
+    xOneL.setFillColor(sf::Color::Black);
+    xOneL.setPosition(395, 137);
+    xOneL.setRotation(135);
+
+    sf::RectangleShape xTwoR(sf::Vector2f(14, 2));
+    xTwoR.setFillColor(sf::Color::Black);
+    xTwoR.setPosition(405, 135);
+    xTwoR.setRotation(45);
+
+    sf::RectangleShape xTwoL(sf::Vector2f(14, 2));
+    xTwoL.setFillColor(sf::Color::Black);
+    xTwoL.setPosition(415, 137);
+    xTwoL.setRotation(135);
+
+    sf::CircleShape head(30);
+    head.setFillColor(sf::Color::White);
+    head.setPosition(370, 120);
+
+    sf::RectangleShape body(sf::Vector2f(10, 150));
+    body.setFillColor(sf::Color::White);
+    body.setPosition(398, 150);
+
+    sf::RectangleShape leftArm(sf::Vector2f(100, 10));
+    leftArm.setFillColor(sf::Color::White);
+    leftArm.setPosition(407, 210);
+    leftArm.setRotation(135);
+
+    sf::RectangleShape rightArm(sf::Vector2f(100, 10));
+    rightArm.setFillColor(sf::Color::White);
+    rightArm.setPosition(407, 200);
+    rightArm.setRotation(25);
+
+    sf::RectangleShape leftLeg(sf::Vector2f(110, 10));
+    leftLeg.setFillColor(sf::Color::White);
+    leftLeg.setPosition(411, 300);
+    leftLeg.setRotation(135);
+
+    sf::RectangleShape rightLeg(sf::Vector2f(100, 10));
+    rightLeg.setFillColor(sf::Color::White);
+    rightLeg.setPosition(411, 300);
+    rightLeg.setRotation(45);
+
+    switch (neuhadol) {
+    case 1:
+        window.draw(stojanTyc);
+        break;
+    case 2:
+        window.draw(stojanTyc);
+        window.draw(stojanPrava);
+        break;
+    case 3:
+        window.draw(stojanTyc);
+        window.draw(stojanPrava);
+        window.draw(stojanLava);
+        break;
+    case 4:
+        window.draw(stojanTyc);
+        window.draw(stojanPrava);
+        window.draw(stojanLava);
+        window.draw(stojanTycR);
+        break;
+    case 5:
+        window.draw(stojanTyc);
+        window.draw(stojanPrava);
+        window.draw(stojanLava);
+        window.draw(stojanTycR);
+        window.draw(snurka);
+        break;
+    case 6:
+        window.draw(stojanTyc);
+        window.draw(stojanPrava);
+        window.draw(stojanLava);
+        window.draw(stojanTycR);
+        window.draw(snurka);
+        window.draw(head);
+        break;
+    case 7:
+        window.draw(stojanTyc);
+        window.draw(stojanPrava);
+        window.draw(stojanLava);
+        window.draw(stojanTycR);
+        window.draw(snurka);
+        window.draw(head);
+        window.draw(body);
+        break;
+    case 8:
+        window.draw(stojanTyc);
+        window.draw(stojanPrava);
+        window.draw(stojanLava);
+        window.draw(stojanTycR);
+        window.draw(snurka);
+        window.draw(head);
+        window.draw(body);
+        window.draw(leftArm);
+        break;
+    case 9:
+        window.draw(stojanTyc);
+        window.draw(stojanPrava);
+        window.draw(stojanLava);
+        window.draw(stojanTycR);
+        window.draw(snurka);
+        window.draw(head);
+        window.draw(body);
+        window.draw(leftArm);
+        window.draw(rightArm);
+        break;
+    case 10:
+        window.draw(stojanTyc);
+        window.draw(stojanPrava);
+        window.draw(stojanLava);
+        window.draw(stojanTycR);
+        window.draw(snurka);
+        window.draw(head);
+        window.draw(body);
+        window.draw(leftArm);
+        window.draw(rightArm);
+        window.draw(leftLeg);
+        break;
+    case 11:
+        window.draw(stojanTyc);
+        window.draw(stojanPrava);
+        window.draw(stojanLava);
+        window.draw(stojanTycR);
+        window.draw(snurka);
+        window.draw(head);
+        window.draw(body);
+        window.draw(leftArm);
+        window.draw(rightArm);
+        window.draw(leftLeg);
+        window.draw(rightLeg);
+        break;
     }
-    else if (neuhadol == 2) {
-        hangman = "  ____\n |    |\n |    O\n |\n |\n_|_\n";
-    }
-    else if (neuhadol == 3) {
-        hangman = "  ____\n |    |\n |    O\n |\n |\n_|_\n";
-    }
-    else if (neuhadol == 4) {
-        hangman = "  ____\n |    |\n |    O\n |   /|\n |\n_|_\n";
-    }
-    else if (neuhadol == 5) {
-        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |\n_|_\n";
-    }
-    else if (neuhadol == 6) {
-        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   /\n_|_\n";
-    }
-    else if (neuhadol == 7) {
-        hangman = "  ____\n |    |\n |    O\n |   /|\\\n |   / \\\n_|_\n";
-    }
-    return hangman;
+}
+
+void drawMenu() {
+    cout << "\t\t  _____________________________________  \n"
+        "\t\t |              HLAVNE MENU            | \n"
+        "\t\t |             -------------           | \n"
+        "\t\t |     --XX---              ---XX--    | \n"
+        "\t\t |       :      ~Obesenec~      :      | \n"
+        "\t\t |       :                      :      | \n"
+        "\t\t |       O      1.  Hrat        O      | \n"
+        "\t\t |      /|\\                    /|\\     | \n"
+        "\t\t |      / \\    2.  Pravidla    / \\     | \n"
+        "\t\t |                                     | \n"
+        "\t\t |              3.  Odist              | \n"
+        "\t\t |_____________________________________| \n\n\n";
 }
 
 void displayWord(const string& word, const vector<char>& guessedChars) {
@@ -100,44 +224,17 @@ bool alreadyGuessed(char guess, const vector<char>& usedLetters) {
     return find(usedLetters.begin(), usedLetters.end(), guess) != usedLetters.end();
 }
 
-int main() {
-    vector<string> words;
-    string word;
-
-    ifstream file("slova.txt");
-
-    if (!file.is_open()) {
-        cout << "Nepodarilo sa otvorit subor!" << endl;
-        return 1;
-    }
-
-    while (file >> word) {
-        words.push_back(word);
-    }
-
-    file.close();
-
+void handleConsoleInput() {
+    char choice[10];
     while (true) {
-        clearConsole(); // Clear the console screen
+        system("cls"); // Clear the console screen
 
-        cout << "\t\t  _____________________________________  \n"
-            "\t\t |              HLAVNE MENU            | \n"
-            "\t\t |             -------------           | \n"
-            "\t\t |     --XX---              ---XX--    | \n"
-            "\t\t |       :      ~Obesenec~      :      | \n"
-            "\t\t |       :                      :      | \n"
-            "\t\t |       O      1.  Hrat        O      | \n"
-            "\t\t |      /|\\                    /|\\     | \n"
-            "\t\t |      / \\    2.  Pravidla    / \\     | \n"
-            "\t\t |                                     | \n"
-            "\t\t |              3.  Odist              | \n"
-            "\t\t |_____________________________________| \n\n\n";
+        drawMenu();
 
-        char choice[10];
         cout << "Vyber moznost: ";
         cin >> choice;
         switch (atoi(choice)) {
-        case 1: {
+        case '1': {
             int minLength, maxLength;
             char levelChoice;
 
@@ -165,10 +262,23 @@ int main() {
                 maxLength = 12;
                 break;
             }
-            clearConsole(); // Clear the console screen
+
+            vector<string> words;
+            string word;
+            ifstream file("slova.txt");
+            if (!file.is_open()) {
+                cout << "Nepodarilo sa otvorit subor!" << endl;
+                return;
+            }
+            while (file >> word) {
+                words.push_back(word);
+            }
+            file.close();
+
+            system("cls"); // Clear the console screen
             string wordToGuess = getRandomWord(words, minLength, maxLength);
 
-            const int maxAttempts = 7;
+            const int maxAttempts = 12;
             int neuhadol = 0;
             vector<char> guessedChars;
             vector<char> usedLetters;
@@ -177,8 +287,11 @@ int main() {
             cout << "Skus uhadnut skryte slovo." << endl;
 
             while (neuhadol < maxAttempts) {
-                clearConsole(); // Clear the console screen
-                cout << drawHangman(neuhadol) << endl;
+                // Display the hangman in the SFML window
+                sf::RenderWindow window(sf::VideoMode(800, 600), "Hangman");
+                drawStickman(window, neuhadol);
+                window.display();
+
                 displayWord(wordToGuess, guessedChars);
 
                 if (!guessedChars.empty()) {
@@ -206,7 +319,6 @@ int main() {
                     usedLetters.push_back(guess);
                     neuhadol++;
                 }
-
                 guessedChars.push_back(guess);
                 bool foundAllLetters = true;
                 for (char letter : wordToGuess) {
@@ -221,13 +333,16 @@ int main() {
                 }
             }
             if (neuhadol >= maxAttempts) {
-                cout << drawHangman(neuhadol) << endl;
+                // Display the hangman in the SFML window
+                sf::RenderWindow window(sf::VideoMode(800, 600), "Hangman");
+                drawStickman(window, neuhadol);
+                window.display();
+
                 cout << "Neuhadol si! Skryte slovo bolo: " << wordToGuess << endl;
             }
             break;
         }
-        case 2:
-            clearConsole(); // Clear the console screen
+        case '2':
             cout << "Vitajte v Obesencovi!" << endl;
             cout << "1. Musite uhadnut skryte slovo." << endl;
             cout << "2. Skryte slovo sa zobrazi ale bude zamaskovane." << endl;
@@ -237,11 +352,12 @@ int main() {
             cout << "6. Hru vyhrate, ak uhadnete vsetky pismena v skrytom slove skor, ako urobite 7 nespravnych tipov." << endl;
             cout << "7. Hru prehrate, ak urobite 7 nespravnych tipov predtym, ako slovo." << endl;
             break;
-        case 3:
+        case '3':
             cout << "Vypninam hru. Dovidenia!" << endl;
             exit(0);
-        case 420:
-            clearConsole();
+
+        case '420':
+            system("cls");
             cout << "Nasiel si Easteregg! Gratulujem." << endl;
             cout << "Tvorcovia:" << endl;
             cout << " Robik28 " << endl;
@@ -256,6 +372,10 @@ int main() {
         cin.ignore();
         cin.get();
     }
+}
 
+int main() {
+    thread inputThread(handleConsoleInput);
+    inputThread.join();
     return 0;
 }
