@@ -352,11 +352,11 @@ void handleConsoleInput() {
             cout << "6. Hru vyhrate, ak uhadnete vsetky pismena v skrytom slove skor, ako urobite 7 nespravnych tipov." << endl;
             cout << "7. Hru prehrate, ak urobite 7 nespravnych tipov predtym, ako slovo." << endl;
             break;
-        case '3':
+        case 3:
             cout << "Vypninam hru. Dovidenia!" << endl;
             exit(0);
 
-        case '420':
+        case 420:
             system("cls");
             cout << "Nasiel si Easteregg! Gratulujem." << endl;
             cout << "Tvorcovia:" << endl;
